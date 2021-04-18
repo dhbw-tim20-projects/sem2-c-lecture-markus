@@ -8,28 +8,17 @@ unsigned char charToHexDigit(char c) { return c >= 'A' ? c - 'A' + 10 : c - '0';
 unsigned char stringToByte(char c[2]) { return charToHexDigit(c[0]) * 16 + charToHexDigit(c[1]); }
 
 int readByteCount(char *line) {
-  char byteCountHex[3];
-  byteCountHex[0] = line[1];
-  byteCountHex[1] = line[2];
-  byteCountHex[2] = '\0';
+  char byteCountHex[3] = {line[1], line[2], '\0'};
   return strtol(byteCountHex, NULL, 16);
 }
 
 int readAddress(char *line) {
-  char hexAddress[5];
-  hexAddress[0] = line[3];
-  hexAddress[1] = line[4];
-  hexAddress[2] = line[5];
-  hexAddress[3] = line[6];
-  hexAddress[4] = '\0';
+  char hexAddress[5] = {line[3], line[4], line[5], line[6], '\0'};
   return strtol(hexAddress, NULL, 16);
 }
 
 char *readRecordType(char *line) {
-  char recordType[3];
-  recordType[0] = line[7];
-  recordType[1] = line[8];
-  recordType[2] = '\0';
+  char recordType[3] = {line[7], line[8], '\0'};
   char *returnValue = malloc(sizeof(recordType));
   strncpy(returnValue, recordType, sizeof(recordType));
   return returnValue;
@@ -47,9 +36,7 @@ uint8_t *readData(char *line, int byteCount) {
 }
 
 uint8_t readChecksum(char *line, int byteCount) {
-  char checksum[3];
-  checksum[0] = line[(byteCount * 2) + 9];
-  checksum[1] = line[(byteCount * 2) + 10];
+  char checksum[3] = {line[(byteCount * 2) + 9], line[(byteCount * 2) + 10]};
   return stringToByte(checksum);
 }
 
@@ -66,7 +53,6 @@ int readHexFile(const char *path, uint8_t *destination, int max_length) {
   FILE *inputFile = fopen(path, "r");
   char *buffer = malloc(16);
   int totalBytes = 0;
-  destination = malloc(max_length);
 
   while (!feof(inputFile)) {
     if (fgets(buffer, max_length, inputFile) != NULL) {
@@ -90,5 +76,8 @@ int readHexFile(const char *path, uint8_t *destination, int max_length) {
       totalBytes += byteCount;
     }
   }
+
   return totalBytes;
 }
+
+int writeHexFile(const char *path, uint8_t *source, int startaddress, int length) {}
