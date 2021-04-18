@@ -6,14 +6,21 @@
 
 int main(int argc, char *argv[]) {
 
-  if (argc != 2) {
-    fprintf(stderr, "Wrong number of parameters! (%d) \n", argc - 1);
-    return EXIT_FAILURE;
+  uint8_t src[] = {0x54, 0x68, 0x65, 0x20, 0x71, 0x75, 0x69, 0x63, 0x6B, 0x20, 0x62,
+                   0x72, 0x6F, 0x77, 0x6E, 0x20, 0x66, 0x6F, 0x78, 0x20, 0x6A, 0x75,
+                   0x6D, 0x70, 0x73, 0x20, 0x6F, 0x76, 0x65, 0x72, 0x20, 0x74, 0x61,
+                   0x7A, 0x79, 0x20, 0x64, 0x6F, 0x67, 0x2E, 0x0A, 0x0A};
+
+  int bytes = writeHexFile("./qbf.hex", src, 0, sizeof(src));
+  printf("Written Bytes:%d\n", bytes);
+
+  int max_length = 1024;
+  uint8_t *binaryData = malloc(max_length);
+  int readBytes = readHexFile("./qbf.hex", binaryData, max_length);
+
+  for (int i = 0; i < sizeof(src); i++) {
+    printf("0x%.2X ", *(binaryData + i));
   }
 
-  uint8_t *destination = {NULL};
-
-  readHexFile(argv[1], destination, 586);
-
-  return EXIT_SUCCESS;
+  return 0;
 }

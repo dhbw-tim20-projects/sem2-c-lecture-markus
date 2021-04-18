@@ -1,5 +1,6 @@
 #include "intelhex.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -80,4 +81,68 @@ int readHexFile(const char *path, uint8_t *destination, int max_length) {
   return totalBytes;
 }
 
-int writeHexFile(const char *path, uint8_t *source, int startaddress, int length) {}
+int writeHexFile(const char *path, uint8_t *source, int startaddress, int length) {
+  FILE *hex_file = fopen(path, "wb");
+  int length_counter = 0;
+  int line_address = startaddress;
+  int written_bytes = 0;
+
+  for (int i = 0; length_counter < length; i++) {
+    int remaining = length - length_counter;
+    int line_length = (remaining < 16) ? remaining : 16;
+    int hex_line_length = line_length + 5;
+    int line_sum = 0;
+    uint8_t *buf = malloc(hex_line_length * sizeof(uint8_t));
+
+    *(buf) = line_length;
+    *(buf + 1) = line_address >> 8;
+    *(buf + 2) = line_address & 0xFF;
+    *(buf + 3) = 0x00;
+
+    for (int j = 0; j < 4; j++)
+      line_sum += *(buf + j);
+
+    for (int k = 0; k < line_length; k++) {
+      *(buf + (4 + k)) = *(source + (i * 16 + k));
+      line_sum += *(buf + (4 + k));
+      length_counter++;
+    }
+
+    *(buf + hex_line_length - 1) = 0xFF & ((line_sum ^ 0xFF) + 1);
+
+    int written_line_bytes = 0;
+    written_line_bytes = fprintf(hex_file, ":");
+    if (written_line_bytes < 0)
+      return -1;
+    written_bytes += written_line_bytes;
+
+    for (int j = 0; j < hex_line_length; j++) {
+      written_line_bytes = fprintf(hex_file, "%.2X", *(buf + j));
+      if (written_line_bytes < 0)
+        return -1;
+      written_bytes += written_line_bytes;
+    }
+
+    written_line_bytes = fprintf(hex_file, "\n");
+    if (written_line_bytes < 0)
+      return -1;
+    written_bytes += written_line_bytes;
+
+    line_address += line_length;
+    free(buf);
+  }
+
+  int written_line_bytes = 0;
+  written_line_bytes = fprintf(hex_file, ":00000001FF");
+  if (written_line_bytes < 0)
+    return -1;
+  written_bytes += written_line_bytes;
+
+  fseek(hex_file, 0L, SEEK_END);
+  long int size = ftell(hex_file);
+  if (written_bytes != size)
+    return -1;
+
+  fclose(hex_file);
+  return written_bytes;
+}
