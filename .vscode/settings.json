@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "random": "c"
+        "random": "c",
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "C_Cpp.clang_format_fallbackStyle": "{ ColumnLimit: 100 }",
 }
