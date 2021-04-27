@@ -1,6 +1,6 @@
 # Intel4004 Stack Management
 
-The actual implementation can be found in `stack.cpp`.
+The actual implementation can be found in `stack.cpp`. 
 
 Due to some ambiguities regarding the task definition, some assumptions were made:
 
