@@ -10,11 +10,11 @@ using namespace std;
 int main() {
   Intel4004Stack *stack = new Intel4004Stack();
 
-  printf("Expect: isUnderflow should return true because no value is present \n");
-  printf("Result: %d \n\n", stack->isUnderflow());
+  cout << "Expect: isUnderflow should return true because no value is present" << endl;
+  cout << "Result: " << stack->isUnderflow() << endl << endl;
 
-  printf("Expect: isOverflow should return false because stack is not filled \n");
-  printf("Result: %d \n\n", stack->isOverflow());
+  cout << "Expect: isOverflow should return false because stack is not filled" << endl;
+  cout << "Result: %d \n\n" << stack->isOverflow() << endl << endl;
 
   cout << "Pushing first entry to stack... " << endl << endl;
   stack->push(UBankedAddress(1000));
