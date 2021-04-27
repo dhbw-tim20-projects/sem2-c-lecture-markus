@@ -1,4 +1,3 @@
-
 #include "stack.h"
 
 void Intel4004Stack::push(const UBankedAddress address) {
@@ -32,15 +31,13 @@ bool Intel4004Stack::isUnderflow() const { return getCurrentStackPosition() == -
 void Intel4004Stack::reset() {
   pushCount = 0;
   popCount = 0;
-  for (int i = 0; i < STACKSIZE; i++) {
+  for (int i = 0; i < STACKSIZE; i++)
     stack[i] = {};
-  }
 }
 
 UBankedAddress *Intel4004Stack::getCopyOfStack(UBankedAddress *const ptr) const {
-  for (int i = 0; i < STACKSIZE; i++) {
+  for (int i = 0; i < STACKSIZE; i++)
     ptr[i] = stack[i];
-  }
   return ptr;
 }
 
