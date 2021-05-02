@@ -14,7 +14,7 @@ int main() {
   cout << "Result: " << stack->isUnderflow() << endl << endl;
 
   cout << "Expect: isOverflow should return false because stack is not filled" << endl;
-  cout << "Result: %d \n\n" << stack->isOverflow() << endl << endl;
+  cout << "Result: " << stack->isOverflow() << endl << endl;
 
   cout << "Pushing first entry to stack... " << endl << endl;
   stack->push(UBankedAddress(1000));

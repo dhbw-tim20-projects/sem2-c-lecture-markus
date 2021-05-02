@@ -1,16 +1,22 @@
 #include "stack.h"
+#include <iostream>
+
+using namespace std;
 
 void Intel4004Stack::push(const UBankedAddress address) {
-  if (pushCount - popCount >= STACKSIZE) {
+  if (isOverflow()) {
     WarningCondition(PUSH);
     return;
+  }
+  if (getCurrentStackPosition() != -1) {
+    stack[getCurrentStackPosition()] = stack[getCurrentStackPosition()].inc();
   }
   stack[getCurrentStackPosition() + 1] = address;
   pushCount++;
 }
 
 UBankedAddress Intel4004Stack::pop() {
-  if (getCurrentStackPosition() < 0) {
+  if (isUnderflow()) {
     WarningCondition(POP);
     return UBankedAddress(0);
   }
@@ -41,4 +47,16 @@ UBankedAddress *Intel4004Stack::getCopyOfStack(UBankedAddress *const ptr) const 
   return ptr;
 }
 
-void Intel4004Stack::WarningCondition(const EDirection direction) {}
+void Intel4004Stack::WarningCondition(const EDirection direction) {
+  // TODO: Implement useful error handling
+  switch (direction) {
+  case PUSH:
+    cout << "Warning: Overflow detected!" << endl;
+    break;
+  case POP:
+    cout << "Warning: Underflow detected!" << endl;
+    break;
+  default:
+    cout << "Warning: Unkown error detected!" << endl;
+  }
+}

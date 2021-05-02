@@ -6,6 +6,7 @@
 class Intel4004Stack : public Intel4004StackBase {
 public:
   Intel4004Stack() : pushCount{0}, popCount(0) {}
+
   virtual void push(const UBankedAddress address);
   virtual UBankedAddress pop();
   virtual void reset();
